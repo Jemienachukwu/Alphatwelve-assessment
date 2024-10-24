@@ -1,8 +1,9 @@
 // mobile nav drop down toggle
-const mobileOpenbtn = document.getElementById("mobile-openbtn");
-const mobileClosebtn = document.getElementById("mobile-closebtn");
-const navToggle = document.getElementById("nav-toggle");
-const navMenu = document.getElementById("mobile-bar-container");
+const mobileOpenbtn = document.getElementById("sidebar-openbtn");
+const mobileClosebtn = document.getElementById("sidebar-closebtn");
+const Mobiletoggle = document.getElementById("sidebar-toggle");
+const mobileMenu = document.getElementById("mobile-sidebar-content");
+// const navMenu = document.getElementById("mobile-bar-container");
 
 // Function to disable body scroll
 function disableScroll() {
@@ -14,14 +15,14 @@ function enableScroll() {
   document.body.style.overflow = "auto";
 }
 
-navToggle.addEventListener("click", () => {
-  if (navMenu.style.display === "block") {
-    navMenu.style.display = "none";
+Mobiletoggle.addEventListener("click", () => {
+  if (mobileMenu.style.display === "block") {
+    mobileMenu.style.display = "none";
     mobileClosebtn.style.display = "none";
     mobileOpenbtn.style.display = "block";
     enableScroll(); // Re-enable scrolling when the menu is closed
   } else {
-    navMenu.style.display = "block";
+    mobileMenu.style.display = "block";
     mobileClosebtn.style.display = "block";
     mobileOpenbtn.style.display = "none";
     disableScroll(); // Disable scrolling when the menu is open
@@ -29,11 +30,17 @@ navToggle.addEventListener("click", () => {
 });
 
 const toggle = document.getElementById("toggle");
-toggle.addEventListener("change", () => {
+const mobileToggle = document.getElementById("mobile-toggle");
+
+const handleToggleChange = () => {
   const body = document.body;
-  body.classList.toggle("dark-mode", toggle.checked);
-});
-// side bar collapse function
+  const isChecked = toggle.checked || mobileToggle.checked;
+  body.classList.toggle("dark-mode", isChecked);
+};
+
+toggle.addEventListener("change", handleToggleChange);
+mobileToggle.addEventListener("change", handleToggleChange);
+
 const collapseButton = document.getElementById("collapse-button");
 const aside = document.querySelector(".aside");
 
