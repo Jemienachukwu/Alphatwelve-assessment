@@ -73,6 +73,7 @@ collapseButton.addEventListener("click", () => {
 });
 
 // chart function
+// chart function
 const chart = document.getElementById("registrationChart").getContext("2d");
 
 const data = {
@@ -246,7 +247,7 @@ const tableData = [
     status: "Completed",
   },
   {
-    name: "Blockchain Revolution Conference",
+    name: "Blockchain Revolution",
     date: "2024-11-05",
     speaker: "Dr. Peter Smith",
     status: "In-Progress",
@@ -330,7 +331,7 @@ const tableData = [
     status: "in-Progress",
   },
   {
-    name: "E-Commerce Strategies Forum",
+    name: "E-Commerce Strategies",
     date: "2024-10-29",
     speaker: "Chris Green",
     status: "Completed",
@@ -387,6 +388,7 @@ let currentPage = 1;
 
 const filterInput = document.getElementById("filter-input");
 const dropdownSelect = document.getElementById("dropdown-select");
+const selectStatus = document.getElementById("select-status");
 
 // Function to filter data based on search term
 function filterData(searchTerm) {
@@ -396,169 +398,151 @@ function filterData(searchTerm) {
   currentPage = 1; // Reset to the first page when filtering
   populateTable(currentPage);
 }
+// filterdata based on status
+// function filterData(statusResult) {
+//   const filteredData = tableData.filter((item) => {
+//     return item.status === statusResult;
+//   });
+
+//   // Call a function to render the filtered data
+//   renderFilteredData(filteredData);
+// }
 
 // Function to populate the table based on the current page and filtered data
+
 function populateTable(page) {
   const start = (page - 1) * rowsPerPage;
   const end = start + rowsPerPage;
   const tableBody = document.getElementById("event-table-body");
+  const mobileContainer = document.getElementById("tester");
   tableBody.innerHTML = "";
-  const totalPages = Math.ceil(tableData.length / rowsPerPage);
+  mobileContainer.innerHTML = ""; // Clear previous mobile rows
 
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const currentData = filteredData.slice(start, end);
+
+  // Populate desktop table rows
   currentData.forEach((event) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${event.name}</td>
       <td>${event.date}</td>
       <td>${event.speaker}</td>
-      <td><span class="status ${
-        event.status === "Completed" ? "completed" : "in-progress"
-      }">
-        <span class="status-circle"></span> ${event.status.replace(
-          "-",
-          " "
-        )}</span></td>`;
+      <td>
+        <span class="status ${
+          event.status === "Completed" ? "completed" : "in-progress"
+        }">
+          <span class="status-circle"></span> ${event.status.replace("-", " ")}
+        </span>
+      </td>`;
     tableBody.appendChild(row);
   });
-
+  let open = false;
+  // Populate mobile rows
   currentData.forEach((event) => {
     const mobileRow = document.createElement("div");
-    mobileRow.innerHTML = ` 
+    mobileRow.classList.add("mobile-row"); // Add a class for better styling (if needed)
+    mobileRow.innerHTML = `
       <div class="top-item">
-          <span class="event-name">
-            <span class="icon">
-            
-              <svg
-                width="5"
-                height="8"
-                viewBox="0 0 5 8"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                class='icon'
-                  d="M0.75 0.75L4.25 4L0.75 7.25"
-                  stroke="#334155"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span> ${event.name}</span>
-            <span class="status ${
-              event.status === "Completed" ? "completed" : "in-progress"
-            }"> 
-              <span class="status-circle"></span> ${event.status.replace(
-                "-",
-                " "
-              )}
-            </span>
-            </div>
+        <span class="event-name">
+          <span class="icon">
+            <svg width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path class='icon' d="M0.75 0.75L4.25 4L0.75 7.25" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.25 10.75L12 14.25L8.75 10.75" stroke="#FCF7FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
 
-            <div class="bottom-item" >
-              <span class="speaker">${event.speaker}</span>
-              <span class="date">${event.date} </span>
-            </div>`;
-    document.getElementById("tester").appendChild(mobileRow);
+          </span> ${event.name}
+        </span>
+        <span class="status ${
+          event.status === "Completed" ? "completed" : "in-progress"
+        }">
+          <span class="status-circle"></span> ${event.status.replace("-", " ")}
+        </span>
+      </div>
+      <div class="bottom-item" style="display: none;">
+        <span class="speaker">${event.speaker}</span>
+        <span class="date">${event.date}</span>
+      </div>`;
+    mobileContainer.appendChild(mobileRow);
   });
 
-  const backdrop = document.getElementById("backdrop");
-  const modal = document.getElementById("modal");
-  const closebtn = document.getElementById("closebtn");
-  const modalBtn = document.getElementById("modal-btn");
-
-  const closeModal = () => {
-    modal.style.display = "none";
-    backdrop.style.display = "none";
-  };
-
-  const rows = document.querySelectorAll("table tr");
-  // add modal
-  rows.forEach((row, i) => {
-    row.addEventListener("click", () => {
-      const data = tableData[i - 1];
-      modal.style.display = "block";
-      backdrop.style.display = "block";
-
-      const eventName = document.getElementById("event-name");
-      const eventDate = document.getElementById("event-date");
-      const eventSpeaker = document.getElementById("speakers");
-
-      eventName.textContent = data.name;
-      eventDate.textContent = data.date;
-      eventSpeaker.textContent = `3 Guest Speakers: ${data.speaker},  ${data.speaker},  ${data.speaker}.
-300 Attendees`;
-    });
-  });
-
-  const topMobileRow = document.querySelectorAll("#tester .top-item");
-  topMobileRow.forEach((item, i) => {
+  // Handle the expand/collapse for mobile rows
+  const topMobileRows = document.querySelectorAll("#tester .top-item");
+  topMobileRows.forEach((item, i) => {
     item.addEventListener("click", () => {
-      const bottomItems = document.getElementsByClassName("bottom-item");
-      if (bottomItems[i]) {
-        if (bottomItems[i].style.display === "flex") {
-          bottomItems[i].style.display = "none";
-        } else {
-          bottomItems[i].style.display = "flex";
-        }
+      const bottomItem = item.nextElementSibling;
+      if (bottomItem) {
+        bottomItem.style.display =
+          bottomItem.style.display === "flex" ? "none" : "flex";
       }
     });
   });
-  const bottomMobileRows = document.querySelectorAll(".bottom-item");
 
-  bottomMobileRows.forEach((item, i) => {
-    item.addEventListener("click", () => {
-      const data = tableData[i];
-
-      modal.style.display = "block";
-      backdrop.style.display = "block";
-
-      const eventName = document.getElementById("event-name");
-      const eventDate = document.getElementById("event-date");
-      const eventSpeaker = document.getElementById("speakers");
-
-      eventName.textContent = data.name;
-      eventDate.textContent = data.date;
-      eventSpeaker.textContent = `3 Guest Speakers: ${data.speaker}, ${data.speaker}, ${data.speaker}. 300 Attendees;`;
+  // Handle modal for desktop rows
+  const rows = document.querySelectorAll("table tr");
+  rows.forEach((row, i) => {
+    row.addEventListener("click", () => {
+      const data = currentData[i];
+      showModal(data);
+      open = !open;
     });
   });
 
-  closebtn.addEventListener("click", function () {
-    closeModal();
-  });
-  modalBtn.addEventListener("click", function () {
-    closeModal();
-  });
-
-  backdrop.addEventListener("click", function () {
-    closeModal();
+  // Handle modal for mobile rows
+  const bottomMobileRows = document.querySelectorAll("#tester .bottom-item");
+  bottomMobileRows.forEach((item, i) => {
+    item.addEventListener("click", () => {
+      const data = currentData[i];
+      showModal(data);
+    });
   });
 
-  dropdownSelect.addEventListener("change", () => {
-    const selectedValue = dropdownSelect.value;
-    rowsPerPage = selectedValue;
-    populateTable(1);
-  });
+  // Update pagination controls
+  updatePaginationControls(page, totalPages);
+}
 
-  const noOfPage = Math.ceil(totalPages);
+// Function to show the modal with the event details
+function showModal(data) {
+  const modal = document.getElementById("modal");
+  const backdrop = document.getElementById("backdrop");
+  const eventName = document.getElementById("event-name");
+  const eventDate = document.getElementById("event-date");
+  const eventSpeaker = document.getElementById("speakers");
+
+  modal.style.display = "block";
+  backdrop.style.display = "block";
+
+  eventName.textContent = data.name;
+  eventDate.textContent = data.date;
+  eventSpeaker.textContent = `3 Guest Speakers: ${data.speaker}, ${data.speaker}, ${data.speaker}. 300 Attendees`;
+
+  // Close modal events
+  document.getElementById("closebtn").onclick = closeModal;
+  document.getElementById("modal-btn").onclick = closeModal;
+  backdrop.onclick = closeModal;
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+  document.getElementById("backdrop").style.display = "none";
+}
+
+// Function to update pagination controls
+function updatePaginationControls(currentPage, totalPages) {
   const pages = document.getElementById("page-numbers");
-
   pages.innerHTML = "";
-  Array.from({ length: noOfPage }).forEach((_, i) => {
+
+  Array.from({ length: totalPages }).forEach((_, i) => {
     const number = document.createElement("div");
     number.textContent = i + 1;
 
     number.addEventListener("click", () => {
-      currentPage = i + 1;
-      populateTable(currentPage);
+      populateTable(i + 1);
     });
 
-    if (page === i + 1) {
-      number.className = "page active";
-    } else {
-      number.className = "page";
-    }
+    number.className = currentPage === i + 1 ? "page active" : "page";
     pages.appendChild(number);
   });
 }
@@ -587,6 +571,10 @@ filterInput.addEventListener("input", (event) => {
   const searchTerm = event.target.value;
   filterData(searchTerm);
 });
+// selectInput.addEventListener("select", (event) => {
+//   const selectStatus = event.target.value;
+//   filterData(statusResult);
+// });
 
 // Event listener for changes in rows per page selection
 dropdownSelect.addEventListener("change", (event) => {

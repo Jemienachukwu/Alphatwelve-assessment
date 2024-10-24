@@ -769,17 +769,18 @@ body.dark-mode .top-item {
 body.dark-mode .icon {
   stroke: #ffffff;
 }
-.event-status {
+/* .event-status {
   color: #fff;
   font-size: 12px;
   background-color: #10b981;
+  display: none;
   border-radius: 30px;
   padding: 2px 10px;
   height: 20px;
   width: 83px;
   display: flex;
   justify-content: center;
-}
+} */
 .bottom-item {
   display: none;
   font-size: 14px;
@@ -1055,11 +1056,11 @@ body.dark-mode .complete-btn {
 }
 
 .bottom-nav {
-  position: fixed;
+  background-color: #fff;
+  display: none;
   height: 64px;
   padding: 0px 16px;
   gap: 8px;
-  display: none;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
@@ -1177,6 +1178,11 @@ body.dark-mode .bottom-nav {
   }
   .bottom-nav {
     display: flex;
+    position: absolute;
+    margin: 0;
+    bottom: 1px;
+    z-index: 5;
+    width: 100%;
   }
   .sidebar-container {
     display: none;
@@ -1199,6 +1205,9 @@ body.dark-mode .bottom-nav {
     width: 100%;
   }
 
+  .event-content .chart {
+    padding: 8px;
+  }
   .table-container h2 {
     margin-bottom: 21px;
   }
