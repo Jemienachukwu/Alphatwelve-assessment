@@ -1,4 +1,4 @@
-// Mobile nav dropdown toggle
+// mobile nav drop down toggle
 const mobileOpenbtn = document.getElementById("sidebar-openbtn");
 const mobileClosebtn = document.getElementById("sidebar-closebtn");
 const Mobiletoggle = document.getElementById("sidebar-toggle");
@@ -30,51 +30,52 @@ const handleToggleChange = () => {
 toggle.addEventListener("change", handleToggleChange);
 mobileToggle.addEventListener("change", handleToggleChange);
 
-// Collapse functionality
+// collapse
 const collapseButton = document.getElementById("collapse-button");
 const aside = document.querySelector(".aside");
 
-const icons = {
-  collapsed: {
-    "logo-icon": "/components/icons/logo2.svg",
-    "home-icon": "/components/icons/home.svg",
-    "events-icon": "/components/icons/events2.svg",
-    "speaker-icon": "/components/icons/speaker2.svg",
-    "reports-icon": "/components/icons/reports2.svg",
-    "notification-icon": "/components/icons/notification2.svg",
-    "messages-icon": "/components/icons/messages2.svg",
-    "settings-icon": "/components/icons/settings.svg",
-    "collapse-icon": "/components/icons/expand.svg",
-  },
-  expanded: {
-    "logo-icon": "/components/icons/logo.svg",
-    "home-icon": "/components/icons/home.svg",
-    "events-icon": "/components/icons/events.svg",
-    "speaker-icon": "/components/icons/speaker.svg",
-    "reports-icon": "/components/icons/reports.svg",
-    "notification-icon": "/components/icons/notification.svg",
-    "messages-icon": "/components/icons/messages.svg",
-    "settings-icon": "/components/icons/settings.svg",
-    "collapse-icon": "/components/icons/collapse.svg",
-  },
+const iconsCollapsed = {
+  "logo-icon": "/components/icons/logo2.svg",
+  "home-icon": "/components/icons/home.svg",
+  "events-icon": "/components/icons/events2.svg",
+  "speaker-icon": "/components/icons/speaker2.svg",
+  "reports-icon": "/components/icons/reports2.svg",
+  "notification-icon": "/components/icons/notification2.svg",
+  "messages-icon": "/components/icons/messages2.svg",
+  "settings-icon": "/components/icons/settings.svg",
+  "collapse-icon": "/components/icons/expand.svg",
+};
+
+const iconsExpanded = {
+  "logo-icon": "/components/icons/logo.svg",
+  "home-icon": "/components/icons/home.svg",
+  "events-icon": "/components/icons/events.svg",
+  "speaker-icon": "/components/icons/speaker.svg",
+  "reports-icon": "/components/icons/reports.svg",
+  "notification-icon": "/components/icons/notification.svg",
+  "messages-icon": "/components/icons/messages.svg",
+  "settings-icon": "/components/icons/settings.svg",
+  "collapse-icon": "/components/icons/collapse.svg",
 };
 
 collapseButton.addEventListener("click", () => {
   aside.classList.toggle("collapsed");
-  const iconSet = aside.classList.contains("collapsed")
-    ? icons.collapsed
-    : icons.expanded;
-  for (const id in iconSet) {
-    document.getElementById(id).src = iconSet[id];
+
+  if (aside.classList.contains("collapsed")) {
+    for (const id in iconsCollapsed) {
+      document.getElementById(id).src = iconsCollapsed[id];
+    }
+  } else {
+    for (const id in iconsExpanded) {
+      document.getElementById(id).src = iconsExpanded[id];
+    }
   }
 });
 
-// Chart function
-const chartContext = document
-  .getElementById("registrationChart")
-  .getContext("2d");
+// chart function
+const chart = document.getElementById("registrationChart").getContext("2d");
 
-const chartData = {
+const data = {
   labels: [
     "Jan",
     "Feb",
@@ -99,28 +100,44 @@ const chartData = {
   ],
 };
 
-const chartOptions = {
+const options = {
   scales: {
     x: {
-      grid: { color: "#555", display: true, lineWidth: 0.3 },
-      ticks: { color: "#64748B" },
+      grid: {
+        color: "#555",
+        display: true,
+        lineWidth: 0.3,
+      },
+
+      ticks: {
+        color: "#64748B",
+      },
     },
     y: {
       beginAtZero: true,
-      grid: { color: "#555", lineWidth: 0.3 },
-      ticks: { color: "#64748B" },
+      grid: {
+        color: "#555",
+        lineWidth: 0.3,
+      },
+      ticks: {
+        color: "#64748B",
+      },
     },
   },
-  plugins: { legend: { display: false } },
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
 };
 
-new Chart(chartContext, {
+new Chart(chart, {
   type: "bar",
-  data: chartData,
-  options: chartOptions,
+  data: data,
+  options: options,
 });
 
-// Carousel functionality
+// carousel
 let slideIndex = 0;
 showSlide(slideIndex);
 
@@ -128,15 +145,21 @@ function showSlide(index) {
   const slides = document.querySelectorAll(".carousel-item");
   const dots = document.querySelectorAll(".dot");
 
+  // Hide all slides
   slides.forEach((slide, i) => {
-    slide.classList.toggle("active", i === index);
-    slide.style.opacity = i === index ? 1 : 0;
+    slide.classList.remove("active");
+    slide.style.opacity = 0;
   });
 
-  dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
-}
+  // Show the current slide
+  slides[index].classList.add("active");
+  slides[index].style.opacity = 1;
 
-// Date selection functionality
+  // Update dots
+  dots.forEach((dot) => dot.classList.remove("active"));
+  dots[index].classList.add("active");
+}
+// select date functionality
 const dateButton = document.getElementById("date-button");
 const calendar = document.getElementById("calendar");
 const monthYear = document.getElementById("month-year");
@@ -168,8 +191,10 @@ function renderCalendar() {
 }
 
 function selectDate(year, month, day) {
-  dateButton.textContent = new Date(year, month, day).toDateString();
+  selectedDate = new Date(year, month, day);
+  dateButton.textContent = selectedDate.toDateString();
   calendar.style.display = "none";
+  filterBySelectedDate(); // Call filter function when a date is selected
 }
 
 dateButton.onclick = () => {
@@ -193,7 +218,7 @@ window.onclick = (event) => {
   }
 };
 
-// Functions for carousel
+// Functions for  navigation
 function nextSlide() {
   slideIndex =
     (slideIndex + 1) % document.querySelectorAll(".carousel-item").length;
@@ -212,7 +237,7 @@ function currentSlide(index) {
   showSlide(slideIndex);
 }
 
-// Table functionality
+// tabe function
 const tableData = [
   {
     name: "Cloud Innovation Summit",
@@ -335,18 +360,52 @@ const tableData = [
     status: "in-Progress",
   },
 ];
-const dropdownSelect = document.getElementById("dropdown-select");
+// Function to filter tableData by the selected date
+function filterBySelectedDate() {
+  if (selectedDate) {
+    // Format selectedDate to match the format in tableData (yyyy-mm-dd)
+    selectedDate.setDate(selectedDate.getDate() + 1);
 
-let rowsPerPage = parseInt(dropdownSelect.value);
+    // Format the adjusted date to match the format in tableData (YYYY-MM-DD)
+    const formattedSelectedDate = selectedDate.toISOString().split("T")[0];
+
+    console.log(formattedSelectedDate);
+
+    filteredData = tableData.filter((event) => {
+      const eventDate = new Date(event.date).toISOString().split("T")[0];
+      return eventDate === formattedSelectedDate;
+    });
+
+    currentPage = 1; // Reset to first page after filtering
+    populateTable(currentPage); // Re-populate the table with the filtered data
+  }
+}
+
+let filteredData = [...tableData]; // Initially, filtered data is the same as all data
+let rowsPerPage = parseInt(document.getElementById("dropdown-select").value);
 let currentPage = 1;
 
+const filterInput = document.getElementById("filter-input");
+const dropdownSelect = document.getElementById("dropdown-select");
+
+// Function to filter data based on search term
+function filterData(searchTerm) {
+  filteredData = tableData.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  currentPage = 1; // Reset to the first page when filtering
+  populateTable(currentPage);
+}
+
+// Function to populate the table based on the current page and filtered data
 function populateTable(page) {
   const start = (page - 1) * rowsPerPage;
   const end = start + rowsPerPage;
   const tableBody = document.getElementById("event-table-body");
   tableBody.innerHTML = "";
+  const totalPages = Math.ceil(tableData.length / rowsPerPage);
 
-  const currentData = tableData.slice(start, end);
+  const currentData = filteredData.slice(start, end);
   currentData.forEach((event) => {
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -363,60 +422,174 @@ function populateTable(page) {
     tableBody.appendChild(row);
   });
 
-  updatePagination(page);
-}
+  currentData.forEach((event) => {
+    const mobileRow = document.createElement("div");
+    mobileRow.innerHTML = ` 
+      <div class="top-item">
+          <span class="event-name">
+            <span class="icon">
+            
+              <svg
+                width="5"
+                height="8"
+                viewBox="0 0 5 8"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                class='icon'
+                  d="M0.75 0.75L4.25 4L0.75 7.25"
+                  stroke="#334155"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span> ${event.name}</span>
+            <span class="status ${
+              event.status === "Completed" ? "completed" : "in-progress"
+            }"> 
+              <span class="status-circle"></span> ${event.status.replace(
+                "-",
+                " "
+              )}
+            </span>
+            </div>
 
-function updatePagination(page) {
-  const totalPages = Math.ceil(tableData.length / rowsPerPage);
-  const pagesContainer = document.getElementById("page-numbers");
-  pagesContainer.innerHTML = "";
+            <div class="bottom-item" >
+              <span class="speaker">${event.speaker}</span>
+              <span class="date">${event.date} </span>
+            </div>`;
+    document.getElementById("tester").appendChild(mobileRow);
+  });
 
-  Array.from({ length: totalPages }).forEach((_, i) => {
+  const backdrop = document.getElementById("backdrop");
+  const modal = document.getElementById("modal");
+  const closebtn = document.getElementById("closebtn");
+  const modalBtn = document.getElementById("modal-btn");
+
+  const closeModal = () => {
+    modal.style.display = "none";
+    backdrop.style.display = "none";
+  };
+
+  const rows = document.querySelectorAll("table tr");
+  // add modal
+  rows.forEach((row, i) => {
+    row.addEventListener("click", () => {
+      const data = tableData[i - 1];
+      modal.style.display = "block";
+      backdrop.style.display = "block";
+
+      const eventName = document.getElementById("event-name");
+      const eventDate = document.getElementById("event-date");
+      const eventSpeaker = document.getElementById("speakers");
+
+      eventName.textContent = data.name;
+      eventDate.textContent = data.date;
+      eventSpeaker.textContent = `3 Guest Speakers: ${data.speaker},  ${data.speaker},  ${data.speaker}.
+300 Attendees`;
+    });
+  });
+
+  const topMobileRow = document.querySelectorAll("#tester .top-item");
+  topMobileRow.forEach((item, i) => {
+    item.addEventListener("click", () => {
+      const bottomItems = document.getElementsByClassName("bottom-item");
+      if (bottomItems[i]) {
+        if (bottomItems[i].style.display === "flex") {
+          bottomItems[i].style.display = "none";
+        } else {
+          bottomItems[i].style.display = "flex";
+        }
+      }
+    });
+  });
+  const bottomMobileRows = document.querySelectorAll(".bottom-item");
+
+  bottomMobileRows.forEach((item, i) => {
+    item.addEventListener("click", () => {
+      const data = tableData[i];
+
+      modal.style.display = "block";
+      backdrop.style.display = "block";
+
+      const eventName = document.getElementById("event-name");
+      const eventDate = document.getElementById("event-date");
+      const eventSpeaker = document.getElementById("speakers");
+
+      eventName.textContent = data.name;
+      eventDate.textContent = data.date;
+      eventSpeaker.textContent = `3 Guest Speakers: ${data.speaker}, ${data.speaker}, ${data.speaker}. 300 Attendees;`;
+    });
+  });
+
+  closebtn.addEventListener("click", function () {
+    closeModal();
+  });
+  modalBtn.addEventListener("click", function () {
+    closeModal();
+  });
+
+  backdrop.addEventListener("click", function () {
+    closeModal();
+  });
+
+  dropdownSelect.addEventListener("change", () => {
+    const selectedValue = dropdownSelect.value;
+    rowsPerPage = selectedValue;
+    populateTable(1);
+  });
+
+  const noOfPage = Math.ceil(totalPages);
+  const pages = document.getElementById("page-numbers");
+
+  pages.innerHTML = "";
+  Array.from({ length: noOfPage }).forEach((_, i) => {
     const number = document.createElement("div");
     number.textContent = i + 1;
-    number.className = page === i + 1 ? "page active" : "page";
+
     number.addEventListener("click", () => {
       currentPage = i + 1;
       populateTable(currentPage);
     });
-    pagesContainer.appendChild(number);
+
+    if (page === i + 1) {
+      number.className = "page active";
+    } else {
+      number.className = "page";
+    }
+    pages.appendChild(number);
   });
 }
 
-// Modal functionality
-const backdrop = document.getElementById("backdrop");
-const modal = document.getElementById("modal");
-const closebtn = document.getElementById("closebtn");
-const modalBtn = document.getElementById("modal-btn");
-
-const closeModal = () => {
-  modal.style.display = "none";
-  backdrop.style.display = "none";
-};
-
-document.querySelectorAll("table tr").forEach((row, i) => {
-  row.addEventListener("click", () => {
-    const data = tableData[i - 1];
-    modal.style.display = "block";
-    backdrop.style.display = "block";
-
-    document.getElementById("event-name").textContent = data.name;
-    document.getElementById("event-date").textContent = data.date;
-    document.getElementById("speakers").textContent = data.speaker;
-    document.getElementById("event-status").textContent = data.status;
-    document.getElementById("event-description").textContent = data.description;
-  });
+document.getElementById("prev-page").addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    populateTable(currentPage);
+  }
 });
 
-closebtn.addEventListener("click", closeModal);
-modalBtn.addEventListener("click", closeModal);
+document.getElementById("next-page").addEventListener("click", () => {
+  const totalPages = Math.ceil(tableData.length / rowsPerPage);
 
-// Initialize table population
-dropdownSelect.addEventListener("change", () => {
-  rowsPerPage = parseInt(dropdownSelect.value);
-  currentPage = 1;
+  if (currentPage < totalPages) {
+    currentPage++;
+    populateTable(currentPage);
+  }
+});
+
+// Initialize
+populateTable(currentPage);
+
+// Event listener for input changes to filter data
+filterInput.addEventListener("input", (event) => {
+  const searchTerm = event.target.value;
+  filterData(searchTerm);
+});
+
+// Event listener for changes in rows per page selection
+dropdownSelect.addEventListener("change", (event) => {
+  rowsPerPage = parseInt(event.target.value);
   populateTable(currentPage);
 });
-
-// Initial rendering
-populateTable(currentPage);
