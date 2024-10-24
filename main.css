@@ -1,9 +1,7 @@
 /* root Variables */
 :root {
   --light: #fcf7ff;
-
   --primary: #8576ff;
-
   --light-text: #334155;
   --primary-select: #ada9bb;
   --light-border: #e2e8f0;
@@ -136,6 +134,9 @@ body.dark-mode .mobile-sidebar-menu a {
   gap: 8px;
 }
 /* side bar */
+.sidebar-container {
+  width: 240px;
+}
 .sidebar-container aside {
   background-color: #f1f5f9;
   height: 100vh;
@@ -321,7 +322,7 @@ body.dark-mode .main-content {
 .summary-cards {
   margin: 24px 0;
   display: flex;
-  /* flex-wrap: wrap; */
+
   width: 100%;
   gap: 12px;
 }
@@ -563,7 +564,6 @@ body.dark-mode .icon {
 
 .search {
   position: relative;
-  /* width: 300%; */
 }
 .search span {
   position: absolute;
@@ -637,7 +637,6 @@ body.dark-mode .calendar {
   height: 36px;
   padding: 8px 10px;
   border: 1px solid var(--light-border);
-  /* opacity: 0px; */
   gap: 8px;
   border-radius: 2px;
 }
@@ -1064,7 +1063,7 @@ body.dark-mode .complete-btn {
 }
 
 .bottom-nav {
-  /* position: fixed; */
+  position: fixed;
   height: 64px;
   padding: 0px 16px;
   gap: 8px;
