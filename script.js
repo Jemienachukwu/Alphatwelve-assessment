@@ -1,93 +1,80 @@
-// mobile nav drop down toggle
+// Mobile nav dropdown toggle
 const mobileOpenbtn = document.getElementById("sidebar-openbtn");
 const mobileClosebtn = document.getElementById("sidebar-closebtn");
 const Mobiletoggle = document.getElementById("sidebar-toggle");
 const mobileMenu = document.getElementById("mobile-sidebar-content");
-// const navMenu = document.getElementById("mobile-bar-container");
 
-// Function to disable body scroll
-function disableScroll() {
-  document.body.style.overflow = "hidden";
-}
-
-// Function to enable body scroll
-function enableScroll() {
-  document.body.style.overflow = "auto";
-}
+const toggleScroll = (enable) => {
+  document.body.style.overflow = enable ? "auto" : "hidden";
+};
 
 Mobiletoggle.addEventListener("click", () => {
-  if (mobileMenu.style.display === "block") {
-    mobileMenu.style.display = "none";
-    mobileClosebtn.style.display = "none";
-    mobileOpenbtn.style.display = "block";
-    enableScroll(); // Re-enable scrolling when the menu is closed
-  } else {
-    mobileMenu.style.display = "block";
-    mobileClosebtn.style.display = "block";
-    mobileOpenbtn.style.display = "none";
-    disableScroll(); // Disable scrolling when the menu is open
-  }
+  const isOpen = mobileMenu.style.display === "block";
+  mobileMenu.style.display = isOpen ? "none" : "block";
+  mobileClosebtn.style.display = isOpen ? "none" : "block";
+  mobileOpenbtn.style.display = isOpen ? "block" : "none";
+  toggleScroll(!isOpen);
 });
 
+// Dark mode toggle
 const toggle = document.getElementById("toggle");
 const mobileToggle = document.getElementById("mobile-toggle");
 
 const handleToggleChange = () => {
-  const body = document.body;
-  const isChecked = toggle.checked || mobileToggle.checked;
-  body.classList.toggle("dark-mode", isChecked);
+  document.body.classList.toggle(
+    "dark-mode",
+    toggle.checked || mobileToggle.checked
+  );
 };
 
 toggle.addEventListener("change", handleToggleChange);
 mobileToggle.addEventListener("change", handleToggleChange);
 
+// Collapse functionality
 const collapseButton = document.getElementById("collapse-button");
 const aside = document.querySelector(".aside");
 
-const iconsCollapsed = {
-  "logo-icon": "/components/icons/logo2.svg",
-  "home-icon": "/components/icons/home.svg",
-  "events-icon": "/components/icons/events2.svg",
-  "speaker-icon": "/components/icons/speaker2.svg",
-  "reports-icon": "/components/icons/reports2.svg",
-  "notification-icon": "/components/icons/notification2.svg",
-  "messages-icon": "/components/icons/messages2.svg",
-  "settings-icon": "/components/icons/settings.svg",
-  "collapse-icon": "/components/icons/expand.svg",
-};
-
-const iconsExpanded = {
-  "logo-icon": "/components/icons/logo.svg",
-  "home-icon": "/components/icons/home.svg",
-  "events-icon": "/components/icons/events.svg",
-  "speaker-icon": "/components/icons/speaker.svg",
-  "reports-icon": "/components/icons/reports.svg",
-  "notification-icon": "/components/icons/notification.svg",
-  "messages-icon": "/components/icons/messages.svg",
-  "settings-icon": "/components/icons/settings.svg",
-  "collapse-icon": "/components/icons/collapse.svg",
-  // Add other icons with their expanded versions
+const icons = {
+  collapsed: {
+    "logo-icon": "/components/icons/logo2.svg",
+    "home-icon": "/components/icons/home.svg",
+    "events-icon": "/components/icons/events2.svg",
+    "speaker-icon": "/components/icons/speaker2.svg",
+    "reports-icon": "/components/icons/reports2.svg",
+    "notification-icon": "/components/icons/notification2.svg",
+    "messages-icon": "/components/icons/messages2.svg",
+    "settings-icon": "/components/icons/settings.svg",
+    "collapse-icon": "/components/icons/expand.svg",
+  },
+  expanded: {
+    "logo-icon": "/components/icons/logo.svg",
+    "home-icon": "/components/icons/home.svg",
+    "events-icon": "/components/icons/events.svg",
+    "speaker-icon": "/components/icons/speaker.svg",
+    "reports-icon": "/components/icons/reports.svg",
+    "notification-icon": "/components/icons/notification.svg",
+    "messages-icon": "/components/icons/messages.svg",
+    "settings-icon": "/components/icons/settings.svg",
+    "collapse-icon": "/components/icons/collapse.svg",
+  },
 };
 
 collapseButton.addEventListener("click", () => {
   aside.classList.toggle("collapsed");
-
-  // Change icons based on collapsed state
-  if (aside.classList.contains("collapsed")) {
-    for (const id in iconsCollapsed) {
-      document.getElementById(id).src = iconsCollapsed[id];
-    }
-  } else {
-    for (const id in iconsExpanded) {
-      document.getElementById(id).src = iconsExpanded[id];
-    }
+  const iconSet = aside.classList.contains("collapsed")
+    ? icons.collapsed
+    : icons.expanded;
+  for (const id in iconSet) {
+    document.getElementById(id).src = iconSet[id];
   }
 });
 
-// chart function
-const chart = document.getElementById("registrationChart").getContext("2d");
+// Chart function
+const chartContext = document
+  .getElementById("registrationChart")
+  .getContext("2d");
 
-const data = {
+const chartData = {
   labels: [
     "Jan",
     "Feb",
@@ -112,44 +99,28 @@ const data = {
   ],
 };
 
-const options = {
+const chartOptions = {
   scales: {
     x: {
-      grid: {
-        color: "#555",
-        display: true,
-        lineWidth: 0.3,
-      },
-
-      ticks: {
-        color: "#64748B",
-      },
+      grid: { color: "#555", display: true, lineWidth: 0.3 },
+      ticks: { color: "#64748B" },
     },
     y: {
       beginAtZero: true,
-      grid: {
-        color: "#555",
-        lineWidth: 0.3,
-      },
-      ticks: {
-        color: "#64748B",
-      },
+      grid: { color: "#555", lineWidth: 0.3 },
+      ticks: { color: "#64748B" },
     },
   },
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
+  plugins: { legend: { display: false } },
 };
 
-new Chart(chart, {
+new Chart(chartContext, {
   type: "bar",
-  data: data,
-  options: options,
+  data: chartData,
+  options: chartOptions,
 });
 
-// carousel
+// Carousel functionality
 let slideIndex = 0;
 showSlide(slideIndex);
 
@@ -157,21 +128,15 @@ function showSlide(index) {
   const slides = document.querySelectorAll(".carousel-item");
   const dots = document.querySelectorAll(".dot");
 
-  // Hide all slides
   slides.forEach((slide, i) => {
-    slide.classList.remove("active");
-    slide.style.opacity = 0; // Set opacity to 0
+    slide.classList.toggle("active", i === index);
+    slide.style.opacity = i === index ? 1 : 0;
   });
 
-  // Show the current slide
-  slides[index].classList.add("active");
-  slides[index].style.opacity = 1; // Set opacity to 1
-
-  // Update dots
-  dots.forEach((dot) => dot.classList.remove("active"));
-  dots[index].classList.add("active");
+  dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
 }
-// select date functionality
+
+// Date selection functionality
 const dateButton = document.getElementById("date-button");
 const calendar = document.getElementById("calendar");
 const monthYear = document.getElementById("month-year");
@@ -179,15 +144,20 @@ const calendarGrid = document.getElementById("calendar-grid");
 let currentDate = new Date();
 
 function renderCalendar() {
-  const year = currentDate.getFullYear(),
-    month = currentDate.getMonth();
-  monthYear.textContent =
-    currentDate.toLocaleString("default", { month: "long" }) + " " + year;
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  monthYear.textContent = `${currentDate.toLocaleString("default", {
+    month: "long",
+  })} ${year}`;
   calendarGrid.innerHTML = "";
 
-  for (let i = 0; i < new Date(year, month, 1).getDay(); i++) {
-    calendarGrid.appendChild(document.createElement("div")); // Empty cells
-  }
+  // Fill empty cells
+  const emptyCells = new Date(year, month, 1).getDay();
+  calendarGrid.append(
+    ...Array.from({ length: emptyCells }, () => document.createElement("div"))
+  );
+
+  // Create calendar days
   for (let day = 1; day <= new Date(year, month + 1, 0).getDate(); day++) {
     const dayElement = document.createElement("div");
     dayElement.textContent = day;
@@ -198,8 +168,7 @@ function renderCalendar() {
 }
 
 function selectDate(year, month, day) {
-  const selectedDate = new Date(year, month, day);
-  dateButton.textContent = selectedDate.toDateString(); // Update button text
+  dateButton.textContent = new Date(year, month, day).toDateString();
   calendar.style.display = "none";
 }
 
@@ -208,6 +177,8 @@ dateButton.onclick = () => {
     calendar.style.display === "block" ? "none" : "block";
   renderCalendar();
 };
+
+// Navigation buttons for calendar
 document.getElementById("prev-month").onclick = () => {
   currentDate.setMonth(currentDate.getMonth() - 1);
   renderCalendar();
@@ -217,13 +188,12 @@ document.getElementById("next-month").onclick = () => {
   renderCalendar();
 };
 window.onclick = (event) => {
-  if (!dateButton.contains(event.target) && !calendar.contains(event.target))
+  if (!dateButton.contains(event.target) && !calendar.contains(event.target)) {
     calendar.style.display = "none";
+  }
 };
 
-renderCalendar();
-
-// Functions for  navigation
+// Functions for carousel
 function nextSlide() {
   slideIndex =
     (slideIndex + 1) % document.querySelectorAll(".carousel-item").length;
@@ -242,7 +212,7 @@ function currentSlide(index) {
   showSlide(slideIndex);
 }
 
-// tabe function
+// Table functionality
 const tableData = [
   {
     name: "Cloud Innovation Summit",
@@ -365,7 +335,6 @@ const tableData = [
     status: "in-Progress",
   },
 ];
-
 const dropdownSelect = document.getElementById("dropdown-select");
 
 let rowsPerPage = parseInt(dropdownSelect.value);
@@ -376,178 +345,78 @@ function populateTable(page) {
   const end = start + rowsPerPage;
   const tableBody = document.getElementById("event-table-body");
   tableBody.innerHTML = "";
-  const totalPages = Math.ceil(tableData.length / rowsPerPage);
 
   const currentData = tableData.slice(start, end);
   currentData.forEach((event) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-          <td>${event.name}</td>
-          <td>${event.date}</td>
-          <td>${event.speaker}</td>
-          <td><span class="status ${
-            event.status === "Completed" ? "completed" : "in-progress"
-          }"> <span class="status-circle"></span> ${event.status.replace(
-      "-",
-      " "
-    )}</span></td>
-      `;
+      <td>${event.name}</td>
+      <td>${event.date}</td>
+      <td>${event.speaker}</td>
+      <td><span class="status ${
+        event.status === "Completed" ? "completed" : "in-progress"
+      }">
+        <span class="status-circle"></span> ${event.status.replace(
+          "-",
+          " "
+        )}</span></td>`;
     tableBody.appendChild(row);
   });
-  currentData.forEach((event) => {
-    const mobileRow = document.createElement("div");
-    mobileRow.innerHTML = `
-      <div class="top-item">
-          <span class="event-name">
-            <span class="icon">
-              <svg
-                width="5"
-                height="8"
-                viewBox="0 0 5 8"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                class='icon'
-                  d="M0.75 0.75L4.25 4L0.75 7.25"
-                  stroke="#334155"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span> ${event.name}</span>
-            <span class="status ${
-              event.status === "Completed" ? "completed" : "in-progress"
-            }"> 
-              <span class="status-circle"></span> ${event.status.replace(
-                "-",
-                " "
-              )}
-            </span>
-            </div>
 
-            <div class="bottom-item" >
-              <span class="speaker">${event.speaker}</span>
-              <span class="date">${event.date} </span>
-            </div>
- `;
-    document.getElementById("tester").appendChild(mobileRow);
-  });
-  const backdrop = document.getElementById("backdrop");
-  const modal = document.getElementById("modal");
-  const closebtn = document.getElementById("closebtn");
-  const modalBtn = document.getElementById("modal-btn");
+  updatePagination(page);
+}
 
-  const closeModal = () => {
-    modal.style.display = "none";
-    backdrop.style.display = "none";
-  };
+function updatePagination(page) {
+  const totalPages = Math.ceil(tableData.length / rowsPerPage);
+  const pagesContainer = document.getElementById("page-numbers");
+  pagesContainer.innerHTML = "";
 
-  const rows = document.querySelectorAll("table tr");
-  // add modal
-  rows.forEach((row, i) => {
-    row.addEventListener("click", () => {
-      const data = tableData[i - 1];
-      modal.style.display = "block";
-      backdrop.style.display = "block";
-
-      const eventName = document.getElementById("event-name");
-      const eventDate = document.getElementById("event-date");
-      const eventSpeaker = document.getElementById("speakers");
-
-      eventName.textContent = data.name;
-      eventDate.textContent = data.date;
-      eventSpeaker.textContent = `3 Guest Speakers: ${data.speaker},  ${data.speaker},  ${data.speaker}.
-300 Attendees`;
-    });
-  });
-
-  const topMobileRow = document.querySelectorAll("#tester .top-item");
-  topMobileRow.forEach((item, i) => {
-    item.addEventListener("click", () => {
-      const bottomItems = document.getElementsByClassName("bottom-item");
-      if (bottomItems[i]) {
-        if (bottomItems[i].style.display === "flex") {
-          bottomItems[i].style.display = "none";
-        } else {
-          bottomItems[i].style.display = "flex";
-        }
-      }
-    });
-  });
-  const bottomMobileRows = document.querySelectorAll(".bottom-item");
-
-  bottomMobileRows.forEach((item, i) => {
-    item.addEventListener("click", () => {
-      const data = tableData[i];
-
-      modal.style.display = "block";
-      backdrop.style.display = "block";
-
-      const eventName = document.getElementById("event-name");
-      const eventDate = document.getElementById("event-date");
-      const eventSpeaker = document.getElementById("speakers");
-
-      eventName.textContent = data.name;
-      eventDate.textContent = data.date;
-      eventSpeaker.textContent = `3 Guest Speakers: ${data.speaker}, ${data.speaker}, ${data.speaker}. 300 Attendees`;
-    });
-  });
-
-  closebtn.addEventListener("click", function () {
-    closeModal();
-  });
-  modalBtn.addEventListener("click", function () {
-    closeModal();
-  });
-
-  backdrop.addEventListener("click", function () {
-    closeModal();
-  });
-  dropdownSelect.addEventListener("change", () => {
-    const selectedValue = dropdownSelect.value;
-    rowsPerPage = selectedValue;
-    populateTable(1);
-  });
-
-  const noOfPage = Math.ceil(totalPages);
-  const pages = document.getElementById("page-numbers");
-
-  pages.innerHTML = "";
-  Array.from({ length: noOfPage }).forEach((_, i) => {
+  Array.from({ length: totalPages }).forEach((_, i) => {
     const number = document.createElement("div");
     number.textContent = i + 1;
-
+    number.className = page === i + 1 ? "page active" : "page";
     number.addEventListener("click", () => {
       currentPage = i + 1;
       populateTable(currentPage);
     });
-
-    if (page === i + 1) {
-      number.className = "page active";
-    } else {
-      number.className = "page";
-    }
-    pages.appendChild(number);
+    pagesContainer.appendChild(number);
   });
 }
 
-document.getElementById("prev-page").addEventListener("click", () => {
-  if (currentPage > 1) {
-    currentPage--;
-    populateTable(currentPage);
-  }
+// Modal functionality
+const backdrop = document.getElementById("backdrop");
+const modal = document.getElementById("modal");
+const closebtn = document.getElementById("closebtn");
+const modalBtn = document.getElementById("modal-btn");
+
+const closeModal = () => {
+  modal.style.display = "none";
+  backdrop.style.display = "none";
+};
+
+document.querySelectorAll("table tr").forEach((row, i) => {
+  row.addEventListener("click", () => {
+    const data = tableData[i - 1];
+    modal.style.display = "block";
+    backdrop.style.display = "block";
+
+    document.getElementById("event-name").textContent = data.name;
+    document.getElementById("event-date").textContent = data.date;
+    document.getElementById("speakers").textContent = data.speaker;
+    document.getElementById("event-status").textContent = data.status;
+    document.getElementById("event-description").textContent = data.description;
+  });
 });
 
-document.getElementById("next-page").addEventListener("click", () => {
-  const totalPages = Math.ceil(tableData.length / rowsPerPage);
+closebtn.addEventListener("click", closeModal);
+modalBtn.addEventListener("click", closeModal);
 
-  if (currentPage < totalPages) {
-    currentPage++;
-    populateTable(currentPage);
-  }
+// Initialize table population
+dropdownSelect.addEventListener("change", () => {
+  rowsPerPage = parseInt(dropdownSelect.value);
+  currentPage = 1;
+  populateTable(currentPage);
 });
 
-// Initialize
+// Initial rendering
 populateTable(currentPage);

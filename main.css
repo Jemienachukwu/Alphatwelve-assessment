@@ -29,6 +29,11 @@ body {
   flex-direction: column;
   color: var(--light-text);
 }
+body {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
 .wrapper {
   display: flex;
 
@@ -1059,13 +1064,14 @@ body.dark-mode .complete-btn {
 }
 
 .bottom-nav {
+  /* position: fixed; */
   height: 64px;
   padding: 0px 16px;
   gap: 8px;
   display: none;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 34px;
+  margin-bottom: 24px;
 }
 body.dark-mode .bottom-nav {
   background-color: #383544;
