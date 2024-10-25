@@ -1298,4 +1298,7 @@ body.dark-mode .bottom-nav {
   .event-footer .btn-2 .complete-btn {
     width: 100%;
   }
+  .pagination-container {
+    margin-bottom: 50px;
+  }
 }
