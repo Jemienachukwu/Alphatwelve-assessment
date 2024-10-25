@@ -184,6 +184,7 @@ aside.collapsed .sidebar-text {
   padding: 8px;
   margin-bottom: 8px;
   gap: 16px;
+  color: #334155;
 }
 
 .sidebar a:hover {
@@ -770,6 +771,7 @@ body.dark-mode .mobile-table-header {
   justify-content: space-between;
   align-items: center;
 }
+
 body.dark-mode .top-item {
   background-color: #484554;
   border: none;
@@ -919,7 +921,6 @@ body.dark-mode .pagination-button.disabled {
   background: var(--primary);
   color: white;
   text-align: center;
-  /* background-color: red; */
   height: 30px;
   width: 30px;
 }
@@ -1092,6 +1093,10 @@ body.dark-mode .bottom-nav {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+.bottom-nav-active {
+  border-top: 4px solid #8576ff;
+  color: #8576ff;
 }
 /* large laptop */
 @media (min-width: 1440px) {
@@ -1323,5 +1328,16 @@ body.dark-mode .bottom-nav {
   }
   .pagination-container {
     margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 380px) {
+  .event-name {
+    display: block;
+    max-width: 120px;
+    /* min-width: 100px; */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
