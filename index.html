@@ -501,31 +501,37 @@
                     </svg>
                   </span>
                 </div>
-                <button class="name">
-                  Name
-                  <svg
-                    width="6"
-                    height="5"
-                    viewBox="0 0 6 5"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5.16668 1.16666L3.00001 3.5L0.833344 1.16666"
-                      stroke="#334155"
-                      class="icon"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </button>
+                <div class="custom-select">
+                  <select name="name" class="status-select" id="sort">
+                    <option value="status" disabled selected>Name</option>
+                    <option value="a-z">A - Z</option>
+                    <option value="z-a">Z - A</option>
+                  </select>
+                  <span class="select-icon-mobile">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        class="icon"
+                        d="M10.1667 7.16666L7.99999 9.5L5.83333 7.16666"
+                        stroke="#334155"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </div>
                 <span class="results"><p>Displaying 100 results</p></span>
               </div>
               <div class="sort-tools">
                 <div class="sort-container">
                   sort :
-                  <select name="sort" id="sort">
+                  <select name="sort" id="sortdate">
                     <option value="most-recent">Most Recent</option>
                     <option value="oldest">Oldest</option>
                   </select>

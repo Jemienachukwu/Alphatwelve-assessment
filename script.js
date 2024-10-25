@@ -317,6 +317,7 @@ let currentPage = 1;
 
 const filterInput = document.getElementById("filter-input");
 const dropdownSelect = document.getElementById("dropdown-select");
+const Alphabetical = document.getElementById("sort");
 const selectStatus = document.getElementById("select-status");
 
 // Function to render the calendar
@@ -397,8 +398,9 @@ function filterBySelectedDate() {
 }
 
 // Function to filter data based on search term
+
 function filterData(searchTerm) {
-  filteredData = filteredData.filter((item) =>
+  filteredData = tableData.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
   currentPage = 1;
@@ -412,6 +414,24 @@ function filterStatusData(statusResult) {
   });
   currentPage = 1;
   populateTable(currentPage);
+}
+
+// Function to sort data based on the selected option
+// Function to sort data based on the selected option
+function sortData() {
+  const selectedValue = document.getElementById("sort").value;
+
+  // Sort the filteredData based on the selected value
+  let value;
+  if (selectedValue === "a-z") {
+    value = filteredData.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (selectedValue === "z-a") {
+    value = filteredData.sort((a, b) => b.name.localeCompare(a.name));
+  }
+  filteredData = value;
+  // Reset to the first page after sorting
+  currentPage = 1;
+  populateTable(currentPage); // Repopulate the table with sorted data
 }
 
 // Event listener for status select dropdown
@@ -439,9 +459,10 @@ function populateTable(page) {
   const currentData = filteredData.slice(start, end);
 
   // Populate desktop table rows
-  currentData.forEach((event) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
+  if (currentData.length > 0) {
+    currentData.forEach((event) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
       <td>${event.name}</td>
       <td>${event.date}</td>
       <td>${event.speaker}</td>
@@ -452,8 +473,15 @@ function populateTable(page) {
           <span class="status-circle"></span> ${event.status.replace("-", " ")}
         </span>
       </td>`;
+      tableBody.appendChild(row);
+    });
+  } else {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>Item does not exist</td>
+  `;
     tableBody.appendChild(row);
-  });
+  }
 
   // Handle trigger modal for desktop rows
   const rows = document.querySelectorAll("table tr:not(:first-child)"); // Skipping the header row if it exists
@@ -464,10 +492,11 @@ function populateTable(page) {
     });
   });
   // Populate mobile rows
-  currentData.forEach((event) => {
-    const mobileRow = document.createElement("div");
-    mobileRow.classList.add("mobile-row");
-    mobileRow.innerHTML = `
+  if (currentData.length > 0) {
+    currentData.forEach((event) => {
+      const mobileRow = document.createElement("div");
+      mobileRow.classList.add("mobile-row");
+      mobileRow.innerHTML = `
       <div class="top-item">
         <span class="event-name">
           <span class="icon">
@@ -486,8 +515,20 @@ function populateTable(page) {
         <span class="speaker">${event.speaker}</span>
         <span class="date">${event.date}</span>
       </div>`;
+      mobileContainer.appendChild(mobileRow);
+    });
+  } else {
+    const mobileRow = document.createElement("div");
+    mobileRow.classList.add("mobile-row");
+    mobileRow.innerHTML = `
+    <div class="top-item">
+      <span class="event-name">
+        item does not exist      
+      </span>
+    </div>
+`;
     mobileContainer.appendChild(mobileRow);
-  });
+  }
 
   // Handle trigger modal for mobile rows
   const bottomMobileRows = document.querySelectorAll("#tester .bottom-item");
@@ -606,6 +647,10 @@ dropdownSelect.addEventListener("change", (event) => {
   rowsPerPage = parseInt(event.target.value);
   currentPage = 1;
   populateTable(currentPage);
+});
+Alphabetical.addEventListener("change", (event) => {
+  currentPage = 1;
+  sortData();
 });
 
 // Initial population of the table
