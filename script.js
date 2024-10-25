@@ -509,11 +509,8 @@ function populateTable(page) {
         const isExpanded = bottomItem.style.display === "flex";
         bottomItem.style.display = isExpanded ? "none" : "flex";
 
-        icon.innerHTML = isExpanded
-          ? `<path class='icon' d="M0.75 0.75L4.25 4L0.75 7.25" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />`
-          : `<path class='icon' d="M10.1667 7.16675L8.00004 9.50008L5.83337 7.16675" stroke="#FCF7FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
-
-        // `<path class='icon' d="M0.75 4L4.25 0.75L4.25 7.25" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />`;
+        icon.style.transform = isExpanded ? "rotate(0deg)" : "rotate(90deg)";
+        icon.style.transition = "transform 0.3s ease";
       }
     });
   });
