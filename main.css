@@ -627,10 +627,13 @@ body.dark-mode .calendar {
 .day:hover {
   background: #f0f0f0;
 }
-
+.custom-select {
+  position: relative;
+}
 .status-select {
   cursor: pointer;
   height: 36px;
+  width: max-content;
   padding: 8px 10px;
   border: 1px solid var(--light-border);
   gap: 8px;
@@ -689,7 +692,9 @@ body.dark-mode .name {
   gap: 8px;
   border-radius: 2px;
 }
-
+.select-icon-mobile {
+  display: none;
+}
 body.dark-mode .sort-select {
   background-color: var(--primary-dark);
   border: none;
@@ -774,18 +779,6 @@ body.dark-mode .top-item {
 body.dark-mode .icon {
   stroke: #ffffff;
 }
-/* .event-status {
-  color: #fff;
-  font-size: 12px;
-  background-color: #10b981;
-  display: none;
-  border-radius: 30px;
-  padding: 2px 10px;
-  height: 20px;
-  width: 83px;
-  display: flex;
-  justify-content: center;
-} */
 .bottom-item {
   display: none;
   font-size: 14px;
@@ -1238,6 +1231,16 @@ body.dark-mode .bottom-nav {
     height: auto;
     flex-direction: column;
   }
+  .select-icon-mobile {
+    display: block;
+  }
+  .select-icon-mobile {
+    position: absolute;
+    left: 55%;
+    top: 55%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
   .search-tools {
     flex-direction: column;
     width: 100%;
@@ -1256,9 +1259,15 @@ body.dark-mode .bottom-nav {
   .date-button {
     width: 100%;
   }
+  .custom-select {
+    width: 100%;
+    height: 36px;
+    position: relative;
+  }
   .search-tools .status-select {
     width: 100%;
     text-align: center;
+    appearance: none;
   }
   .search-tools .name {
     width: 100%;
@@ -1313,6 +1322,6 @@ body.dark-mode .bottom-nav {
     width: 100%;
   }
   .pagination-container {
-    margin-bottom: 70px;
+    margin-bottom: 40px;
   }
 }
