@@ -498,7 +498,6 @@ function populateTable(page) {
     });
   });
 
-  // Handle the expand/collapse for mobile rows
   const topMobileRows = document.querySelectorAll("#tester .top-item");
   topMobileRows.forEach((item, i) => {
     item.addEventListener("click", () => {
