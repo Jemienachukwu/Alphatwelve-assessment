@@ -73,7 +73,6 @@ collapseButton.addEventListener("click", () => {
 });
 
 // chart function
-// chart function
 const chart = document.getElementById("registrationChart").getContext("2d");
 
 const data = {
@@ -160,66 +159,8 @@ function showSlide(index) {
   dots.forEach((dot) => dot.classList.remove("active"));
   dots[index].classList.add("active");
 }
-// select date functionality
-const dateButton = document.getElementById("date-button");
-const calendar = document.getElementById("calendar");
-const monthYear = document.getElementById("month-year");
-const calendarGrid = document.getElementById("calendar-grid");
-let currentDate = new Date();
 
-function renderCalendar() {
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
-  monthYear.textContent = `${currentDate.toLocaleString("default", {
-    month: "long",
-  })} ${year}`;
-  calendarGrid.innerHTML = "";
-
-  // Fill empty cells
-  const emptyCells = new Date(year, month, 1).getDay();
-  calendarGrid.append(
-    ...Array.from({ length: emptyCells }, () => document.createElement("div"))
-  );
-
-  // Create calendar days
-  for (let day = 1; day <= new Date(year, month + 1, 0).getDate(); day++) {
-    const dayElement = document.createElement("div");
-    dayElement.textContent = day;
-    dayElement.className = "day";
-    dayElement.onclick = () => selectDate(year, month, day);
-    calendarGrid.appendChild(dayElement);
-  }
-}
-
-function selectDate(year, month, day) {
-  selectedDate = new Date(year, month, day);
-  dateButton.textContent = selectedDate.toDateString();
-  calendar.style.display = "none";
-  filterBySelectedDate(); // Call filter function when a date is selected
-}
-
-dateButton.onclick = () => {
-  calendar.style.display =
-    calendar.style.display === "block" ? "none" : "block";
-  renderCalendar();
-};
-
-// Navigation buttons for calendar
-document.getElementById("prev-month").onclick = () => {
-  currentDate.setMonth(currentDate.getMonth() - 1);
-  renderCalendar();
-};
-document.getElementById("next-month").onclick = () => {
-  currentDate.setMonth(currentDate.getMonth() + 1);
-  renderCalendar();
-};
-window.onclick = (event) => {
-  if (!dateButton.contains(event.target) && !calendar.contains(event.target)) {
-    calendar.style.display = "none";
-  }
-};
-
-// Functions for  navigation
+// Functions for carousel navigation
 function nextSlide() {
   slideIndex =
     (slideIndex + 1) % document.querySelectorAll(".carousel-item").length;
@@ -237,8 +178,9 @@ function currentSlide(index) {
   slideIndex = index;
   showSlide(slideIndex);
 }
+setInterval(nextSlide, 3000);
 
-// tabe function
+// table data
 const tableData = [
   {
     name: "Cloud Innovation Summit",
@@ -361,28 +303,15 @@ const tableData = [
     status: "in-Progress",
   },
 ];
-// Function to filter tableData by the selected date
-function filterBySelectedDate() {
-  if (selectedDate) {
-    // Format selectedDate to match the format in tableData (yyyy-mm-dd)
-    selectedDate.setDate(selectedDate.getDate() + 1);
+// Select date functionality
+const dateButton = document.getElementById("date-button");
+const calendar = document.getElementById("calendar");
+const monthYear = document.getElementById("month-year");
+const calendarGrid = document.getElementById("calendar-grid");
+let currentDate = new Date();
+let selectedDate = null;
 
-    // Format the adjusted date to match the format in tableData (YYYY-MM-DD)
-    const formattedSelectedDate = selectedDate.toISOString().split("T")[0];
-
-    console.log(formattedSelectedDate);
-
-    filteredData = tableData.filter((event) => {
-      const eventDate = new Date(event.date).toISOString().split("T")[0];
-      return eventDate === formattedSelectedDate;
-    });
-
-    currentPage = 1; // Reset to first page after filtering
-    populateTable(currentPage); // Re-populate the table with the filtered data
-  }
-}
-
-let filteredData = [...tableData]; // Initially, filtered data is the same as all data
+let filteredData = [...tableData];
 let rowsPerPage = parseInt(document.getElementById("dropdown-select").value);
 let currentPage = 1;
 
@@ -390,33 +319,121 @@ const filterInput = document.getElementById("filter-input");
 const dropdownSelect = document.getElementById("dropdown-select");
 const selectStatus = document.getElementById("select-status");
 
-// Function to filter data based on search term
-function filterData(searchTerm) {
-  filteredData = tableData.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+// Function to render the calendar
+function renderCalendar() {
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  monthYear.textContent = `${currentDate.toLocaleString("default", {
+    month: "long",
+  })} ${year}`;
+  calendarGrid.innerHTML = "";
+
+  // Fill empty cells
+  const emptyCells = new Date(year, month, 1).getDay();
+  calendarGrid.append(
+    ...Array.from({ length: emptyCells }, () => document.createElement("div"))
   );
-  currentPage = 1; // Reset to the first page when filtering
+
+  // Create calendar days
+  for (let day = 1; day <= new Date(year, month + 1, 0).getDate(); day++) {
+    const dayElement = document.createElement("div");
+    dayElement.textContent = day;
+    dayElement.className = "day";
+    dayElement.onclick = () => selectDate(year, month, day);
+    calendarGrid.appendChild(dayElement);
+  }
+}
+
+// Function to select a date
+function selectDate(year, month, day) {
+  selectedDate = new Date(year, month, day);
+  dateButton.textContent = selectedDate.toDateString();
+  calendar.style.display = "none";
+  filterBySelectedDate();
+}
+
+// Toggle calendar visibility
+dateButton.onclick = () => {
+  calendar.style.display =
+    calendar.style.display === "block" ? "none" : "block";
+  renderCalendar();
+};
+
+// Navigation buttons for calendar
+document.getElementById("prev-month").onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  renderCalendar();
+};
+document.getElementById("next-month").onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  renderCalendar();
+};
+
+// Close calendar if clicked outside
+window.onclick = (event) => {
+  if (!dateButton.contains(event.target) && !calendar.contains(event.target)) {
+    calendar.style.display = "none";
+  }
+};
+
+// Function to filter tableData by the selected date
+function filterBySelectedDate() {
+  filteredData = [...tableData];
+
+  if (selectedDate) {
+    const year = selectedDate.getFullYear();
+    const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
+    const day = String(selectedDate.getDate()).padStart(2, "0"); //
+    const formattedSelectedDate = `${year}-${month}-${day}`;
+
+    filteredData = filteredData.filter((event) => {
+      const eventDate = event.date;
+      return eventDate === formattedSelectedDate;
+    });
+  }
+
+  currentPage = 1;
   populateTable(currentPage);
 }
-// filterdata based on status
-// function filterData(statusResult) {
-//   const filteredData = tableData.filter((item) => {
-//     return item.status === statusResult;
-//   });
 
-//   // Call a function to render the filtered data
-//   renderFilteredData(filteredData);
-// }
+// Function to filter data based on search term
+function filterData(searchTerm) {
+  filteredData = filteredData.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  currentPage = 1;
+  populateTable(currentPage);
+}
+
+// Function to filter data based on status
+function filterStatusData(statusResult) {
+  filteredData = tableData.filter((item) => {
+    return item.status === statusResult;
+  });
+  currentPage = 1;
+  populateTable(currentPage);
+}
+
+// Event listener for status select dropdown
+selectStatus.addEventListener("change", (event) => {
+  const statusResult = event.target.value;
+
+  if (statusResult === "Completed" || statusResult === "In-Progress") {
+    filterStatusData(statusResult);
+  } else {
+    filteredData = [...tableData];
+    populateTable(currentPage);
+  }
+});
 
 // Function to populate the table based on the current page and filtered data
-
 function populateTable(page) {
   const start = (page - 1) * rowsPerPage;
   const end = start + rowsPerPage;
   const tableBody = document.getElementById("event-table-body");
   const mobileContainer = document.getElementById("tester");
   tableBody.innerHTML = "";
-  mobileContainer.innerHTML = ""; // Clear previous mobile rows
+  mobileContainer.innerHTML = "";
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const currentData = filteredData.slice(start, end);
@@ -437,11 +454,19 @@ function populateTable(page) {
       </td>`;
     tableBody.appendChild(row);
   });
-  let open = false;
+
+  // Handle trigger modal for desktop rows
+  const rows = document.querySelectorAll("table tr:not(:first-child)"); // Skipping the header row if it exists
+  rows.forEach((row, index) => {
+    row.addEventListener("click", () => {
+      const data = currentData[index]; // Use index to access the corresponding data
+      showModal(data);
+    });
+  });
   // Populate mobile rows
   currentData.forEach((event) => {
     const mobileRow = document.createElement("div");
-    mobileRow.classList.add("mobile-row"); // Add a class for better styling (if needed)
+    mobileRow.classList.add("mobile-row");
     mobileRow.innerHTML = `
       <div class="top-item">
         <span class="event-name">
@@ -449,10 +474,6 @@ function populateTable(page) {
             <svg width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path class='icon' d="M0.75 0.75L4.25 4L0.75 7.25" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M15.25 10.75L12 14.25L8.75 10.75" stroke="#FCF7FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-
           </span> ${event.name}
         </span>
         <span class="status ${
@@ -468,34 +489,32 @@ function populateTable(page) {
     mobileContainer.appendChild(mobileRow);
   });
 
-  // Handle the expand/collapse for mobile rows
-  const topMobileRows = document.querySelectorAll("#tester .top-item");
-  topMobileRows.forEach((item, i) => {
-    item.addEventListener("click", () => {
-      const bottomItem = item.nextElementSibling;
-      if (bottomItem) {
-        bottomItem.style.display =
-          bottomItem.style.display === "flex" ? "none" : "flex";
-      }
-    });
-  });
-
-  // Handle modal for desktop rows
-  const rows = document.querySelectorAll("table tr");
-  rows.forEach((row, i) => {
-    row.addEventListener("click", () => {
-      const data = currentData[i];
-      showModal(data);
-      open = !open;
-    });
-  });
-
-  // Handle modal for mobile rows
+  // Handle trigger modal for mobile rows
   const bottomMobileRows = document.querySelectorAll("#tester .bottom-item");
   bottomMobileRows.forEach((item, i) => {
     item.addEventListener("click", () => {
       const data = currentData[i];
       showModal(data);
+    });
+  });
+
+  // Handle the expand/collapse for mobile rows
+  const topMobileRows = document.querySelectorAll("#tester .top-item");
+  topMobileRows.forEach((item, i) => {
+    item.addEventListener("click", () => {
+      const bottomItem = item.nextElementSibling;
+      const icon = item.querySelector(".icon svg");
+
+      if (bottomItem) {
+        const isExpanded = bottomItem.style.display === "flex";
+        bottomItem.style.display = isExpanded ? "none" : "flex";
+
+        icon.innerHTML = isExpanded
+          ? `<path class='icon' d="M0.75 0.75L4.25 4L0.75 7.25" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />`
+          : // : `<path class='icon' d="M10.1667 7.16675L8.00004 9.50008L5.83337 7.16675" stroke="#FCF7FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+            `<path class='icon' d="M0.75 4L4.25 0.75L4.25 7.25" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />`;
+      }
     });
   });
 
@@ -520,6 +539,9 @@ function showModal(data) {
 
   // Close modal events
   document.getElementById("closebtn").onclick = closeModal;
+  document.getElementById("edit-modal-btn").onclick = closeModal;
+  document.getElementById("delete-modal-btn").onclick = closeModal;
+  document.getElementById("complete-modal-btn").onclick = closeModal;
   document.getElementById("modal-btn").onclick = closeModal;
   backdrop.onclick = closeModal;
 }
@@ -537,47 +559,31 @@ function updatePaginationControls(currentPage, totalPages) {
   Array.from({ length: totalPages }).forEach((_, i) => {
     const number = document.createElement("div");
     number.textContent = i + 1;
-
-    number.addEventListener("click", () => {
+    number.className = "page-number";
+    number.onclick = () => {
       populateTable(i + 1);
-    });
+    };
 
-    number.className = currentPage === i + 1 ? "page active" : "page";
+    if (i + 1 === currentPage) {
+      number.classList.add("active");
+    }
+
     pages.appendChild(number);
   });
 }
 
-document.getElementById("prev-page").addEventListener("click", () => {
-  if (currentPage > 1) {
-    currentPage--;
-    populateTable(currentPage);
-  }
-});
-
-document.getElementById("next-page").addEventListener("click", () => {
-  const totalPages = Math.ceil(tableData.length / rowsPerPage);
-
-  if (currentPage < totalPages) {
-    currentPage++;
-    populateTable(currentPage);
-  }
-});
-
-// Initialize
-populateTable(currentPage);
-
-// Event listener for input changes to filter data
+// Event listener for search input
 filterInput.addEventListener("input", (event) => {
   const searchTerm = event.target.value;
   filterData(searchTerm);
 });
-// selectInput.addEventListener("select", (event) => {
-//   const selectStatus = event.target.value;
-//   filterData(statusResult);
-// });
 
-// Event listener for changes in rows per page selection
+// Event listener for rows per page dropdown
 dropdownSelect.addEventListener("change", (event) => {
   rowsPerPage = parseInt(event.target.value);
+  currentPage = 1;
   populateTable(currentPage);
 });
+
+// Initial population of the table
+populateTable(currentPage);
