@@ -511,9 +511,9 @@ function populateTable(page) {
 
         icon.innerHTML = isExpanded
           ? `<path class='icon' d="M0.75 0.75L4.25 4L0.75 7.25" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />`
-          : // : `<path class='icon' d="M10.1667 7.16675L8.00004 9.50008L5.83337 7.16675" stroke="#FCF7FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+          : `<path class='icon' d="M10.1667 7.16675L8.00004 9.50008L5.83337 7.16675" stroke="#FCF7FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
 
-            `<path class='icon' d="M0.75 4L4.25 0.75L4.25 7.25" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />`;
+        // `<path class='icon' d="M0.75 4L4.25 0.75L4.25 7.25" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />`;
       }
     });
   });
@@ -542,7 +542,6 @@ function showModal(data) {
   document.getElementById("edit-modal-btn").onclick = closeModal;
   document.getElementById("delete-modal-btn").onclick = closeModal;
   document.getElementById("complete-modal-btn").onclick = closeModal;
-  document.getElementById("modal-btn").onclick = closeModal;
   backdrop.onclick = closeModal;
 }
 
@@ -559,19 +558,59 @@ function updatePaginationControls(currentPage, totalPages) {
   Array.from({ length: totalPages }).forEach((_, i) => {
     const number = document.createElement("div");
     number.textContent = i + 1;
-    number.className = "page-number";
-    number.onclick = () => {
-      populateTable(i + 1);
-    };
 
-    if (i + 1 === currentPage) {
-      number.classList.add("active");
+    number.addEventListener("click", () => {
+      populateTable(i + 1);
+    });
+
+    number.className = currentPage === i + 1 ? "page active" : "page";
+    pages.appendChild(number);
+
+    const prevButton = document.getElementById("prev-page");
+    const nextButton = document.getElementById("next-page");
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+    // Check if the previous button should be disabled
+    if (currentPage <= 1) {
+      prevButton.style.backgroundColor = " #E2E8F0";
+      prevButton.style.cursor = "not-allowed";
+
+      prevButton.style.opacity = "1";
+    } else {
+      prevButton.style.backgroundColor = "#fff";
+      prevButton.style.cursor = "pointer";
+
+      prevButton.style.opacity = "1";
     }
 
-    pages.appendChild(number);
+    if (currentPage >= totalPages) {
+      nextButton.style.backgroundColor = "#E2E8F0";
+      nextButton.style.cursor = "not-allowed";
+
+      nextButton.style.opacity = "1";
+    } else {
+      nextButton.style.backgroundColor = "#fff";
+      nextButton.style.opacity = "1";
+      nextButton.style.cursor = "pointer";
+    }
   });
 }
 
+document.getElementById("prev-page").addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    populateTable(currentPage);
+  }
+});
+
+document.getElementById("next-page").addEventListener("click", () => {
+  const totalPages = Math.ceil(tableData.length / rowsPerPage);
+
+  if (currentPage < totalPages) {
+    currentPage++;
+    populateTable(currentPage);
+  }
+});
 // Event listener for search input
 filterInput.addEventListener("input", (event) => {
   const searchTerm = event.target.value;

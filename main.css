@@ -882,16 +882,21 @@ body.dark-mode .in-progress {
 }
 
 .pagination button {
+  background-color: transparent;
   padding: 5px 10px;
   font-size: 14px;
   cursor: pointer;
-  border: #e2e8f0;
+  border: 1px solid #e2e8f0;
   width: 36px;
   height: 36px;
   padding: 8px;
   gap: 8px;
   border-radius: 2px;
   opacity: 0px;
+}
+
+.page-button-disabled {
+  background: red;
 }
 body.dark-mode .pagination button {
   background-color: var(--primary-dark);
@@ -907,7 +912,7 @@ body.dark-mode .pagination button {
   background: var(--primary);
   color: white;
   text-align: center;
-  background-color: red;
+  /* background-color: red; */
   height: 30px;
   width: 30px;
 }
@@ -1182,6 +1187,7 @@ body.dark-mode .bottom-nav {
     z-index: 5;
   }
   .wrapper {
+    /* height: 80%; */
     margin-bottom: 50px;
   }
   .bottom-nav {
