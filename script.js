@@ -4,16 +4,11 @@ const mobileClosebtn = document.getElementById("sidebar-closebtn");
 const Mobiletoggle = document.getElementById("sidebar-toggle");
 const mobileMenu = document.getElementById("mobile-sidebar-content");
 
-const toggleScroll = (enable) => {
-  document.body.style.overflow = enable ? "auto" : "hidden";
-};
-
 Mobiletoggle.addEventListener("click", () => {
   const isOpen = mobileMenu.style.display === "block";
   mobileMenu.style.display = isOpen ? "none" : "block";
   mobileClosebtn.style.display = isOpen ? "none" : "block";
   mobileOpenbtn.style.display = isOpen ? "block" : "none";
-  toggleScroll(!isOpen);
 });
 
 // Dark mode toggle
@@ -398,7 +393,6 @@ function filterBySelectedDate() {
 }
 
 // Function to filter data based on search term
-
 function filterData(searchTerm) {
   filteredData = tableData.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
