@@ -27,6 +27,12 @@ body {
   flex-direction: column;
   color: var(--light-text);
 }
+@media (min-width: 1440px) {
+  body {
+    width: 1440px;
+    margin: 0 auto;
+  }
+}
 body {
   ::-webkit-scrollbar {
     display: none;
@@ -893,16 +899,24 @@ body.dark-mode .in-progress {
   gap: 8px;
   border-radius: 2px;
   opacity: 0px;
+  transition: background-color 0.3s, color 0.3s;
+}
+.pagination-button.disabled {
+  background-color: #e2e8f0;
+  cursor: not-allowed;
 }
 
-.page-button-disabled {
-  background: red;
-}
-body.dark-mode .pagination button {
+body.dark-mode .pagination-button {
   background-color: var(--primary-dark);
-  color: var(--primary);
   border: none;
+  color: #fff;
 }
+
+body.dark-mode .pagination-button.disabled {
+  background-color: #3b3b3b;
+  color: #888;
+}
+
 #page-numbers {
   display: flex;
   gap: 18px;
@@ -1299,6 +1313,6 @@ body.dark-mode .bottom-nav {
     width: 100%;
   }
   .pagination-container {
-    margin-bottom: 50px;
+    margin-bottom: 70px;
   }
 }

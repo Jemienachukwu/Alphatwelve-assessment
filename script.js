@@ -561,35 +561,23 @@ function updatePaginationControls(currentPage, totalPages) {
 
     number.className = currentPage === i + 1 ? "page active" : "page";
     pages.appendChild(number);
-
-    const prevButton = document.getElementById("prev-page");
-    const nextButton = document.getElementById("next-page");
-    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-
-    // Check if the previous button should be disabled
-    if (currentPage <= 1) {
-      prevButton.style.backgroundColor = " #E2E8F0";
-      prevButton.style.cursor = "not-allowed";
-
-      prevButton.style.opacity = "1";
-    } else {
-      prevButton.style.backgroundColor = "#fff";
-      prevButton.style.cursor = "pointer";
-
-      prevButton.style.opacity = "1";
-    }
-
-    if (currentPage >= totalPages) {
-      nextButton.style.backgroundColor = "#E2E8F0";
-      nextButton.style.cursor = "not-allowed";
-
-      nextButton.style.opacity = "1";
-    } else {
-      nextButton.style.backgroundColor = "#fff";
-      nextButton.style.opacity = "1";
-      nextButton.style.cursor = "pointer";
-    }
   });
+
+  const prevButton = document.getElementById("prev-page");
+  const nextButton = document.getElementById("next-page");
+
+  // Add or remove the "disabled" class based on the current page
+  if (currentPage <= 1) {
+    prevButton.classList.add("disabled");
+  } else {
+    prevButton.classList.remove("disabled");
+  }
+
+  if (currentPage >= totalPages) {
+    nextButton.classList.add("disabled");
+  } else {
+    nextButton.classList.remove("disabled");
+  }
 }
 
 document.getElementById("prev-page").addEventListener("click", () => {
